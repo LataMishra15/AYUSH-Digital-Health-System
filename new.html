@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYUSH Healthcare Portal - NAMASTE Digital Health System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1B4D89;
+            --secondary-color: #2E7D32;
+            --accent-color: #00ACC1;
+            --light-bg: #F5F9FC;
+            --white: #FFFFFF;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --border-color: #E0E0E0;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --font-size-base: 16px;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #2196F3;
+            --secondary-color: #4CAF50;
+            --accent-color: #00BCD4;
+            --light-bg: #1E1E1E;
+            --white: #2D2D2D;
+            --text-dark: #E0E0E0;
+            --text-light: #B0B0B0;
+            --border-color: #424242;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            font-size: var(--font-size-base);
+            transition: all 0.3s ease;
+        }
+
+        /* Top Header Bar */
+        .top-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .top-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary-color);
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Font Size Controls */
+        .font-controls {
+            display: flex;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 5px;
+            gap: 5px;
+        }
+
+        .font-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .font-btn:hover,
+        .font-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Theme & Language Controls */
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .control-btn i {
+            font-size: 16px;
+        }
+
+        /* Language Dropdown */
+        .language-dropdown {
+            position: relative;
+        }
+
+        .language-list {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
+            z-index: 1000;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .language-list.show {
+            display: block;
+        }
+
+        .language-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .language-item:hover {
+            background: var(--light-bg);
+            padding-left: 25px;
+        }
+
+        .language-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+            background: rgba(27, 77, 137, 0.1);
+        }
+
+        .abha-login-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(27, 77, 137, 0.3);
+        }
+
+        .abha-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(27, 77, 137, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Home Page Styles */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 60px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-banner h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-banner p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Tabs Section */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Search Section */
+        .search-container {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(27, 77, 137, 0.1);
+        }
+
+        .search-box select {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(27, 77, 137, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(27, 77, 137, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+        }
+
+        /* Results */
+        .results-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .result-card {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .result-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .code-badge.tm2 {
+            background: var(--secondary-color);
+        }
+
+        .code-badge.biomed {
+            background: var(--accent-color);
+        }
+
+        .result-title {
+            font-size: 22px;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .result-details {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .result-details p {
+            margin-bottom: 8px;
+        }
+
+        /* About & Support Pages */
+        .info-section {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .info-section h2 {
+            color: var(--primary-color);
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .info-section p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        .info-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* ABHA Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10001;
+            display: none;
+            min-width: 300px;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            border-left: 5px solid var(--success-color);
+        }
+
+        .notification.error {
+            border-left: 5px solid #f44336;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .navbar-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .welcome-banner {
+                padding: 30px 20px;
+            }
+
+            .welcome-banner h2 {
+                font-size: 28px;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa);
+            color: rgb(25, 21, 21);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .log-entry {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: var(--primary-color);
+        }
+
+        .log-entry .timestamp {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .log-entry .action {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="top-header-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>AYUSH Healthcare Portal</h1>
+                    <p>National AYUSH Morbidity & Standardized Terminologies Electronic System</p>
+                </div>
+            </div>
+            <div class="top-controls">
+                <!-- Font Size Controls -->
+                <div class="font-controls">
+                    <button class="font-btn" onclick="changeFontSize('small')" title="Small Font">A-</button>
+                    <button class="font-btn active" onclick="changeFontSize('medium')" title="Medium Font">A</button>
+                    <button class="font-btn" onclick="changeFontSize('large')" title="Large Font">A+</button>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button class="control-btn" onclick="toggleTheme()" id="themeBtn">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="language-dropdown">
+                    <button class="control-btn" onclick="toggleLanguage()">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLang">English</span>
+                    </button>
+                    <div class="language-list" id="languageList">
+                        <div class="language-item" onclick="selectLanguage('English')">English</div>
+                        <div class="language-item" onclick="selectLanguage('हिंदी')">हिंदी (Hindi)</div>
+                        <div class="language-item" onclick="selectLanguage('বাংলা')">বাংলা (Bengali)</div>
+                        <div class="language-item" onclick="selectLanguage('తెలుగు')">తెలుగు (Telugu)</div>
+                        <div class="language-item" onclick="selectLanguage('मराठी')">मराठी (Marathi)</div>
+                        <div class="language-item" onclick="selectLanguage('தமிழ்')">தமிழ் (Tamil)</div>
+                        <div class="language-item" onclick="selectLanguage('ગુજરાતી')">ગુજરાતી (Gujarati)</div>
+                        <div class="language-item" onclick="selectLanguage('ಕನ್ನಡ')">ಕನ್ನಡ (Kannada)</div>
+                        <div class="language-item" onclick="selectLanguage('മലയാളം')">മലയാളം (Malayalam)</div>
+                        <div class="language-item" onclick="selectLanguage('ଓଡିଆ')">ଓଡିଆ (Odia)</div>
+                        <div class="language-item" onclick="selectLanguage('ਪੰਜਾਬੀ')">ਪੰਜਾਬੀ (Punjabi)</div>
+                        <div class="language-item" onclick="selectLanguage('অসমীয়া')">অসমীয়া (Assamese)</div>
+                        <div class="language-item" onclick="selectLanguage('اردو')">اردو (Urdu)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <ul class="nav-links">
+                <li><a href="#" class="active" onclick="showPage('home')"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" onclick="showPage('about')"><i class="fas fa-info-circle"></i> About Us</a></li>
+                <li><a href="#" onclick="window.location.href='medichat.html'"><i class="fas fa-headset"></i>
+                        Support</a></li>
+            </ul>
+            <!-- <button class="abha-login-btn"  onclick="window.location.href='login.html'">
+                <i class="fa-solid fa-user-nurse"></i>
+                Admin Login
+            </button> -->
+            <button class="abha-login-btn"  onclick="window.location.href='login.html'">
+                <i class="fas fa-user-shield"></i>
+                ABHA Login
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Page -->
+        <div id="home" class="page-section active">
+            <div class="welcome-banner">
+                <h2>Welcome to AYUSH Digital Health System</h2>
+                <p>NAMASTE-ICD11 FHIR Terminology Service - Integrating Traditional Medicine with Modern Healthcare
+                    Standards</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('search')">🔍 Search Diagnosis</button>
+                <button class="tab-btn" onclick="showTab('translate')">🔄 Code Translation</button>
+                <button class="tab-btn" onclick="showTab('upload')">📤 Upload FHIR Bundle</button>
+                <button class="tab-btn" onclick="showTab('ingest')">📊 Ingest CSV</button>
+                <button class="tab-btn" onclick="showTab('audit')">📋 Audit Logs</button>
+            </div>
+
+
+            <!-- Search Tab -->
+            <div id="search" class="tab-content active">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">
+                    <i class="fas fa-search"></i> Search NAMASTE Terminologies
+                </h2>
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search for disorders, symptoms, or codes..."
+                            onkeypress="if(event.key==='Enter') performSearch() " onkeyup="handleSearchInput(event)">
+                        <select id="systemFilter">
+                            <option value="all">All Systems</option>
+                            <option value="ayurveda">Ayurveda</option>
+                            <option value="siddha">Siddha</option>
+                            <option value="unani">Unani</option>
+                        </select>
+                        <button class="btn" onclick="performSearch()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                <div id="searchResults" class="results-container"></div>
+            </div>
+
+            <!-- Translate Tab -->
+            <div id="translate" class="tab-content">
+                <h2>🔄 Code Translation (NAMASTE ↔ ICD-11)</h2>
+                <div class="form-group">
+                    <label>Source System:</label>
+                    <select id="sourceSystem">
+                        <option value="namaste">NAMASTE</option>
+                        <option value="icd11_tm2">ICD-11 TM2</option>
+                        <option value="icd11_biomedicine">ICD-11 Biomedicine</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Source Code:</label>
+                    <input type="text" id="sourceCode" placeholder="e.g., NAM-AYU-005">
+                </div>
+                <div class="form-group">
+                    <label>Target System:</label>
+                    <select id="targetSystem">
+                        <option value="icd11_tm2">ICD-11 TM2</option>
+                        <option value="icd11_biomedicine">ICD-11 Biomedicine</option>
+                        <option value="namaste">NAMASTE</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="translateCode()">Translate</button>
+                <div id="translationResult" style="margin-top: 30px;"></div>
+            </div>
+
+            <!-- Upload Tab -->
+            <div id="upload" class="tab-content">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">
+                    <i class="fas fa-upload"></i> Upload FHIR Bundle (Dual Coding Required)
+                </h2>
+                <p style="margin-bottom: 20px; color: var(--text-light);">
+                    Upload a FHIR Bundle containing Condition resources with both NAMASTE and ICD-11 codes.
+                </p>
+                <div class="form-group">
+                    <label>FHIR Bundle JSON:</label>
+                    <textarea id="bundleJson"
+                        style="min-height: 200px; font-family: 'Courier New', monospace; width: 100%; padding: 15px; border: 2px solid var(--border-color); border-radius: 8px;"
+                        placeholder='Paste your FHIR Bundle JSON here...'></textarea>
+                </div>
+                <button class="btn" onclick="uploadBundle()">
+                    <i class="fas fa-upload"></i> Upload Bundle
+                </button>
+                <button class="btn btn-secondary" onclick="generateSampleBundle()" style="margin-left: 10px;">
+                    <i class="fas fa-file-code"></i> Generate Sample Bundle
+                </button>
+                <div id="uploadResult" style="margin-top: 30px;"></div>
+            </div>
+
+            <!-- Ingest Tab -->
+            <div id="ingest" class="tab-content">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">
+                    <i class="fas fa-database"></i> Ingest NAMASTE CSV
+                </h2>
+                <div style="border: 3px dashed var(--primary-color); border-radius: 15px; padding: 60px; text-align: center; background: var(--light-bg); cursor: pointer;"
+                    onclick="document.getElementById('csvFile').click()">
+                    <i class="fas fa-file-csv"
+                        style="font-size: 48px; color: var(--primary-color); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--text-dark); margin-bottom: 10px;">Drop CSV file here or click to upload</h3>
+                    <p style="color: var(--text-light);">Upload NAMASTE terminology CSV file</p>
+                    <input type="file" id="csvFile" accept=".csv" style="display: none;"
+                        onchange="handleCSVUpload(event)">
+                </div>
+                <div id="ingestResult" style="margin-top: 30px;"></div>
+            </div>
+
+
+            <div id="audit" class="tab-content">
+                <h2>📋 Audit Logs (ISO 22600 Compliant)</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="totalLogs">0</h3>
+                        <p>Total Actions</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalSearches">0</h3>
+                        <p>Searches</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalUploads">0</h3>
+                        <p>Bundles Uploaded</p>
+                    </div>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="auditUserFilter" placeholder="Filter by User ID">
+                    <input type="text" id="auditActionFilter" placeholder="Filter by Action">
+                    <button class="btn" onclick="loadAuditLogs()">Refresh Logs</button>
+                </div>
+                <div id="auditResults" class="results-container"></div>
+            </div>
+        </div>
+
+        <div id="notification" class="notification"></div>
+
+        <script>
+
+
+            const API_BASE = 'http://localhost:5000/api';
+            let authToken = '';
+
+            // NAMASTE CodeSystem Data (Fallback)
+            const NAMASTE_DATA = {
+                "concept": [
+                    { "code": "AY-001", "display": "Jwara", "definition": "Fever or pyrexia in Ayurvedic context", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM7NK5" }, { "code": "icd11Biomedicine", "valueCode": "1A20" }] },
+                    { "code": "AY-002", "display": "Kasa", "definition": "Cough or respiratory disorder", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM4LE5" }, { "code": "icd11Biomedicine", "valueCode": "DA63" }] },
+                    { "code": "AY-003", "display": "Shwasa", "definition": "Breathlessness or asthma", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM5LD3" }, { "code": "icd11Biomedicine", "valueCode": "CA23" }] },
+                    { "code": "AY-004", "display": "Arsha", "definition": "Hemorrhoids or piles", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "DD12" }] },
+                    { "code": "AY-005", "display": "Atisara", "definition": "Diarrhea or loose motions", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM7NKS" }, { "code": "icd11Biomedicine", "valueCode": "1A20" }] },
+                    { "code": "AY-006", "display": "Grahani", "definition": "Irritable bowel syndrome", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM4LE5" }, { "code": "icd11Biomedicine", "valueCode": "DA63" }] },
+                    { "code": "AY-007", "display": "Prameha", "definition": "Diabetes mellitus in Ayurvedic context", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM5LD3" }, { "code": "icd11Biomedicine", "valueCode": "CA23" }] },
+                    { "code": "AY-008", "display": "Madhumeha", "definition": "Type 2 diabetes mellitus", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM5LD3" }, { "code": "icd11Biomedicine", "valueCode": "5A11.0" }, { "code": "parentCode", "valueCode": "AY-007" }] },
+                    { "code": "AY-009", "display": "Shirahshool", "definition": "Headache or cephalgia", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "MG22" }] },
+                    { "code": "AY-010", "display": "Kamala", "definition": "Jaundice or hepatic disorder", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "DB94" }] },
+                    { "code": "SID-001", "display": "Suram", "definition": "Fever in Siddha medicine", "property": [{ "code": "ayushSystem", "valueString": "Siddha" }, { "code": "icd11TM2", "valueCode": "XM7NK5" }, { "code": "icd11Biomedicine", "valueCode": "1A20" }] },
+                    { "code": "SID-002", "display": "Irumul", "definition": "Cough in Siddha system", "property": [{ "code": "ayushSystem", "valueString": "Siddha" }, { "code": "icd11TM2", "valueCode": "XM7NK5" }, { "code": "icd11Biomedicine", "valueCode": "MD10" }] },
+                    { "code": "UN-001", "display": "Hummah", "definition": "Fever in Unani medicine", "property": [{ "code": "ayushSystem", "valueString": "Unani" }, { "code": "icd11TM2", "valueCode": "XM7NK5" }, { "code": "icd11Biomedicine", "valueCode": "1A20" }] },
+                    { "code": "UN-002", "display": "Su'al", "definition": "Cough in Unani system", "property": [{ "code": "ayushSystem", "valueString": "Unani" }, { "code": "icd11TM2", "valueCode": "XM7NK5" }, { "code": "icd11Biomedicine", "valueCode": "MD10" }] },
+                    { "code": "AY-011", "display": "Pandu", "definition": "Anemia or pallor", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "BA00" }] },
+                    { "code": "AY-012", "display": "Kushtha", "definition": "Skin diseases in general", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "EA80" }] },
+                    { "code": "AY-013", "display": "Kitibha", "definition": "Psoriasis or chronic skin condition", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "EA80.1" }, { "code": "parentCode", "valueCode": "AY-012" }] },
+                    { "code": "AY-014", "display": "Indralupta", "definition": "Alopecia or hair loss", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "EA80.4" }] },
+                    { "code": "AY-015", "display": "Netra-roga", "definition": "Eye diseases in general", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "9A00" }] },
+                    { "code": "AY-016", "display": "Karna-roga", "definition": "Ear diseases in general", "property": [{ "code": "ayushSystem", "valueString": "Ayurveda" }, { "code": "icd11TM2", "valueCode": "XM8AR2" }, { "code": "icd11Biomedicine", "valueCode": "H93" }] },
+                    {"code": "AY-017","display": "Nasaroga","definition": "Nasal diseases","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "CA23.1"}]},
+                    {"code": "AY-018","display": "Hridroga","definition": "Cardiac disorders","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "BA00"}]},
+                    {"code": "AY-019","display": "Udara-roga","definition": "Abdominal diseases","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "DD12"}]},
+                    {"code": "AY-020","display": "Mutraghata","definition": "Urinary retention or obstruction","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "GB60"}]},
+                    {"code": "AY-021","display": "Prameha-pidika","definition": "Diabetic carbuncle","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "1A70 "},{"code": "parentCode","valueCode": "AY-007"}]},
+                    {"code": "AY-022","display": "Vata-rakta","definition": "Gout or gouty arthritis","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "FA20"}]},
+                    {"code": "AY-023","display": "Amavata","definition": "Rheumatoid arthritis","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "FA20.1"}]},
+                    {"code": "AY-024","display": "Sandhivata","definition": "Osteoarthritis","property": [{"code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "FA20.2"}]},
+                    {"code": "AY-025","display": "Gridhrasi","definition": "Sciatica","property": [{ "code": "ayushSystem","valueString": "Ayurveda"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "MG30 "}]},
+                    {"code": "SID-003","display": "Eraippu","definition": "Asthma or breathing difficulty","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM7NK5"},{"code": "icd11Biomedicine","valueCode": "CA23"}]},
+                    {"code": "SID-004","display": "Moola Noi","definition": "Hemorrhoids in Siddha", "property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM7NK5"},{"code": "icd11Biomedicine","valueCode": "DA63"}]},
+                    {"code": "SID-005","display": "Kalaisal","definition": "Diarrhea in Siddha medicine","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM7NK5"},{"code": "icd11Biomedicine","valueCode": "1A20"}]},
+                    {"code": "SID-006","display": "Neerilivu","definition": "Diabetes in Siddha context","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM5LD3"},{"code": "icd11Biomedicine","valueCode": "CA23"}]},
+                    {"code": "SID-007","display": "Thalai Noi","definition": "Headache in Siddha","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "MG22"}]},
+                    {"code": "SID-008","display": "Manju Kamalai","definition": "Jaundice in Siddha","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "DB94"}]},
+                    {"code": "SID-009","display": "Vel Noi","definition": "Anemia in Siddha system","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "BA00"}]},
+                    {"code": "SID-010","display": "Thol Noi","definition": "Skin diseases in Siddha","property": [{"code": "ayushSystem","valueString": "Siddha"},{"code": "icd11TM2","valueCode": "XM8AR2"},{"code": "icd11Biomedicine","valueCode": "EA80"}]},
+                    {"code": "UN-003","display": "Zeeq-un-nafas","definition": "Asthma in Unani medicine","property": [{"code": "ayushSystem","valueString": "Unani"},{"code": "icd11TM2","valueCode": "XM7NK5"},{"code": "icd11Biomedicine","valueCode": "CA23"}]},
+                    {"code": "UN-004","display": "Bawaseer","definition": "Hemorrhoids in Unani","property": [{"code": "ayushSystem","valueString": "Unani"},{"code": "icd11TM2","valueCode": "XM7NK5"},{"code": "icd11Biomedicine","valueCode": "DA63"}]},
+                    {"code": "UN-005","display": "Ishal","definition": "Diarrhea in Unani medicine","property": [{"code": "ayushSystem","valueString": "Unani"},{"code": "icd11TM2","valueCode": "XM7NK5"},{"code": "icd11Biomedicine","valueCode": "1A20"}]},
+                    {"code": "UN-006","display": "Ziabetes","definition": "Diabetes in Unani context","property": [{"code": "ayushSystem","valueString": "Unani"},{"code": "icd11TM2","valueCode": "XM5LD3"},{"code": "icd11Biomedicine","valueCode": "CA23"}]},
+                ]
+            };
+
+            // Helper function
+            function getPropertyValue(properties, code) {
+                const prop = properties.find(p => p.code === code);
+                return prop ? (prop.valueString || prop.valueCode) : null;
+            }
+
+            window.onload = function () {
+                authenticateUser();
+            };
+
+            async function authenticateUser() {
+                try {
+                    const response = await fetch(`${API_BASE}/auth/token`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_id: 'demo_clinician',
+                            abha_id: '12-3456-7890-1234'
+                        })
+                    });
+                    const data = await response.json();
+                    authToken = data.token;
+                    console.log('Connected to backend');
+                } catch (error) {
+                    console.log('Using local data');
+                }
+            }
+            // Tab Navigation
+            function showTab(tabName) {
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.getElementById(tabName).classList.add('active');
+                event.target.classList.add('active');
+            }
+
+            function handleSearchInput(event) {
+                const query = document.getElementById('searchInput').value;
+
+                // Clear results if input is empty
+                if (query.length === 0) {
+                    document.getElementById('searchResults').innerHTML = '';
+                    return;
+                }
+
+                // Search on Enter key
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            }
+
+            // Search Function
+            let searchTimeout;
+            async function performSearch() {
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                const system = document.getElementById('systemFilter').value;
+
+
+                if (query.length < 2) {
+                    document.getElementById('searchResults').innerHTML = '';
+                    return;
+                }
+
+                // Try backend, fallback to local
+                try {
+                    if (authToken) {
+                        const response = await fetch(`${API_BASE}/search/autocomplete?q=${query}&system=${system}`, {
+                            headers: { 'Authorization': `Bearer ${authToken}` }
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            displaySearchResults(data.results);
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.log('Using local search');
+                }
+
+                // Local search
+                const results = NAMASTE_DATA.concept.filter(concept => {
+                    const ayushSystem = getPropertyValue(concept.property, 'ayushSystem');
+                    const matchesSystem = system === 'all' || ayushSystem === system;
+                    const icd11TM2 = getPropertyValue(concept.property, 'icd11TM2') || '';
+                    const icd11Bio = getPropertyValue(concept.property, 'icd11Biomedicine') || '';
+
+                    const matchesQuery =
+                        concept.code.toLowerCase().includes(query) ||
+                        concept.display.toLowerCase().includes(query) ||
+                        concept.definition.toLowerCase().includes(query) ||
+                        icd11TM2.toLowerCase().includes(query) ||
+                        icd11Bio.toLowerCase().includes(query);
+
+                    return matchesSystem && matchesQuery;
+                });
+
+                displaySearchResults(results.map(concept => ({
+                    code: concept.code,
+                    display: concept.display,
+                    definition: concept.definition,
+                    ayushSystem: getPropertyValue(concept.property, 'ayushSystem'),
+                    icd11TM2: getPropertyValue(concept.property, 'icd11TM2'),
+                    icd11Biomedicine: getPropertyValue(concept.property, 'icd11Biomedicine'),
+                    parentCode: getPropertyValue(concept.property, 'parentCode')
+                })));
+            }
+
+            function displaySearchResults(results) {
+                const container = document.getElementById('searchResults');
+
+                if (!results || results.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No results found</p>';
+                    return;
+                }
+
+                container.innerHTML = results.map(result => {
+                    const ayushSystem = result.ayushSystem || 'N/A';
+                    const icd11TM2 = result.icd11TM2 || 'N/A';
+                    const icd11Bio = result.icd11Biomedicine || 'N/A';
+                    const parentCode = result.parentCode || 'N/A';
+
+                    return `
+            <div class="result-card">
+                <h3 style="color: var(--primary-color); margin-bottom: 20px;">
+                    <span class="code-badge">${result.code}</span>
+                    ${result.display}
+                </h3>
+                <table class="result-table">
+                    
+                    <tr>
+                        <td><strong>NAMASTE Code</strong></td>
+                        <td>${result.code}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Disease</strong></td>
+                        <td>${result.display}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Explanation</strong></td>
+                        <td>${result.definition}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AYUSH System</strong></td>
+                        <td> ${ayushSystem}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ICD-11 TM2 Code</strong></td>
+                        <td>${icd11TM2}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ICD-11 Biomedicine Code</strong></td>
+                        <td>${icd11Bio}</td>
+                    </tr>
+                    ${parentCode !== 'N/A' ? `
+                    <tr>
+                        <td><strong>Parent Code</strong></td>
+                        <td>${parentCode}</td>
+                    </tr>
+                    ` : ''}
+                </table>
+            </div>
+        `;
+                }).join('');
+            }
+
+            async function translateCode() {
+                const sourceSystem = document.getElementById('sourceSystem').value;
+                const sourceCode = document.getElementById('sourceCode').value.trim();
+                const targetSystem = document.getElementById('targetSystem').value;
+
+                if (!sourceCode) {
+                    showNotification('Please enter a source code', 'error');
+                    return;
+                }
+
+                // Try backend first
+                try {
+                    if (authToken) {
+                        const response = await fetch(`${API_BASE}/translate`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${authToken}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                source_system: sourceSystem,
+                                source_code: sourceCode,
+                                target_system: targetSystem
+                            })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            displayTranslation(data.translation);
+                            showNotification('Translation successful!', 'success');
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.log('Using local translation');
+                }
+
+                // Local translation fallback
+                let concept = null;
+
+                if (sourceSystem === 'namaste') {
+                    concept = NAMASTE_DATA.concept.find(c => c.code === sourceCode);
+                } else if (sourceSystem === 'icd11_tm2') {
+                    concept = NAMASTE_DATA.concept.find(c =>
+                        getPropertyValue(c.property, 'icd11TM2') === sourceCode
+                    );
+                } else if (sourceSystem === 'icd11_biomedicine') {
+                    concept = NAMASTE_DATA.concept.find(c => {
+                        const bioCode = getPropertyValue(c.property, 'icd11Biomedicine') || '';
+                        return bioCode.includes(sourceCode);
+                    });
+                }
+
+                if (!concept) {
+                    document.getElementById('translationResult').innerHTML = `
+            <div class="result-card" style="border-left-color: #f44336;">
+                <h3 style="color: #f44336;">❌ Translation Failed</h3>
+                <p>Code "${sourceCode}" not found in ${sourceSystem} system</p>
+            </div>
+        `;
+                    showNotification('Code not found', 'error');
+                    return;
+                }
+
+                const icd11TM2 = getPropertyValue(concept.property, 'icd11TM2');
+                const icd11Bio = getPropertyValue(concept.property, 'icd11Biomedicine');
+
+                let translation = {
+                    source: {
+                        system: sourceSystem,
+                        code: sourceCode,
+                        display: concept.display
+                    },
+                    target: {}
+                };
+
+                if (targetSystem === 'namaste') {
+                    translation.target = {
+                        system: 'namaste',
+                        code: concept.code,
+                        display: concept.display
+                    };
+                } else if (targetSystem === 'icd11_tm2') {
+                    translation.target = {
+                        system: 'icd11_tm2',
+                        code: icd11TM2,
+                        display: concept.definition
+                    };
+                } else {
+                    translation.target = {
+                        system: 'icd11_biomedicine',
+                        code: icd11Bio,
+                        display: concept.definition
+                    };
+                }
+
+                displayTranslation(translation);
+                showNotification('Translation successful!', 'success');
+            }
+
+            // New helper function - add this after translateCode
+            function displayTranslation(translation) {
+                document.getElementById('translationResult').innerHTML = `
+        <div class="result-card">
+            <h3 >✅ Translation Successful</h3>
+            <table class="result-table">
+                
+                <tr>
+                    <td><strong>Source</strong></td>
+                    <td>${translation.source.system}</td>
+                </tr>
+                <tr>
+                    <td><strong>Code</strong></td>
+                    <td><span class="code-badge">${translation.source.code}</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Display</strong></td>
+                    <td>${translation.source.display}</td>
+                </tr>
+                 <tr><hr style="margin: 15px 0;"></tr>
+                <tr>
+                    <td><strong>Target</strong></td>
+                    <td>${translation.target.system}</td>
+                </tr>
+                <tr>
+                    <td><strong>Code</strong></td>
+                    <td><span class="code-badge">${translation.target.code}</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Display</strong></td>
+                    <td>${translation.target.display}</td>
+                </tr>
+            </table>
+        </div>
+    `;
+            }
+
+            // CSV Upload
+            function handleCSVUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch(`${API_BASE}/ingest/namaste`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('ingestResult').innerHTML = `
+                    <div class="result-card">
+                        <h3>✅ CSV Ingestion Successful</h3>
+                        <p><strong>Concepts Loaded:</strong> ${data.codesystem.count}</p>
+                        <p><strong>Version:</strong> ${data.codesystem.version}</p>
+                        <p><strong>Status:</strong> ${data.codesystem.status}</p>
+                    </div>
+                `;
+                        showNotification('CSV ingested successfully!', 'success');
+                    })
+                    .catch(error => {
+                        showNotification('CSV upload failed: ' + error.message, 'error');
+                    });
+            }
+
+            // Bundle Upload
+            async function uploadBundle() {
+                const bundleText = document.getElementById('bundleJson').value;
+
+                try {
+                    const bundle = JSON.parse(bundleText);
+
+                    const response = await fetch(`${API_BASE}/encounter/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(bundle)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        document.getElementById('uploadResult').innerHTML = `
+                        <div class="result-card">
+                            <h3>✅ Bundle Upload Successful</h3>
+                            <p><strong>Bundle ID:</strong> ${data.bundle_id}</p>
+                            <p><strong>Resources Processed:</strong> ${data.resources_processed}</p>
+                        </div>
+                    `;
+                        showNotification('FHIR Bundle uploaded successfully!', 'success');
+                    } else {
+                        showNotification(data.error || 'Upload failed', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Bundle upload error: ' + error.message, 'error');
+                }
+            }
+
+            function generateSampleBundle() {
+                const sampleBundle = {
+                    "resourceType": "Bundle",
+                    "type": "transaction",
+                    "entry": [{
+                        "resource": {
+                            "resourceType": "Condition",
+                            "clinicalStatus": {
+                                "coding": [{
+                                    "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+                                    "code": "active"
+                                }]
+                            },
+                            "code": {
+                                "coding": [
+                                    {
+                                        "system": "http://namaste.gov.in/fhir/CodeSystem/ayush",
+                                        "code": "NAM-AYU-005",
+                                        "display": "Prameha (Diabetes Mellitus)"
+                                    },
+                                    {
+                                        "system": "http://id.who.int/icd/release/11/2024-01/mms",
+                                        "code": "TM2-A03.1",
+                                        "display": "Urinary disorders - Prameha"
+                                    },
+                                    {
+                                        "system": "http://id.who.int/icd/release/11/2024-01/mms",
+                                        "code": "5A40",
+                                        "display": "Diabetes mellitus"
+                                    }
+                                ]
+                            },
+                            "subject": {
+                                "reference": "Patient/example"
+                            }
+                        }
+                    }]
+                };
+
+                document.getElementById('bundleJson').value = JSON.stringify(sampleBundle, null, 2);
+                showNotification('Sample bundle generated!', 'success');
+            }
+
+            // Audit Logs
+            async function loadAuditLogs() {
+                try {
+                    const response = await fetch(`${API_BASE}/audit/logs`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    });
+                    const data = await response.json();
+
+                    document.getElementById('totalLogs').textContent = data.total;
+
+                    const searches = data.logs.filter(log => log.action === 'SEARCH').length;
+                    const uploads = data.logs.filter(log => log.action === 'BUNDLE_UPLOAD').length;
+
+                    document.getElementById('totalSearches').textContent = searches;
+                    document.getElementById('totalUploads').textContent = uploads;
+
+                    const container = document.getElementById('auditResults');
+                    container.innerHTML = data.logs.map(log => `
+                    <div class="log-entry">
+                        <div class="timestamp">${new Date(log.timestamp).toLocaleString()}</div>
+                        <div class="action">${log.action} - ${log.resource}</div>
+                        <div>User: ${log.user_id} | IP: ${log.ip_address}</div>
+                    </div>
+                `).join('');
+                } catch (error) {
+                    showNotification('Failed to load audit logs: ' + error.message, 'error');
+                }
+            }
+
+            // Notification
+            function showNotification(message, type) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification ${type} show`;
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        </script>
+
+        <div id="footer-container"></div>
+
+        <script>
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                });
+        </script>
+
+</body>
+
+</html>

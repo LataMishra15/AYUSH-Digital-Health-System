@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediChat - Medical Consultation Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        
+        .message.bot .message-content {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-area input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .input-area input:focus {
+            border-color: #667eea;
+        }
+        
+        .input-area button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .input-area button:hover {
+            transform: scale(1.05);
+        }
+        
+        .input-area button:active {
+            transform: scale(0.95);
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .message.bot .avatar {
+            background: #667eea;
+            color: white;
+        }
+        
+        .message.user .avatar {
+            background: #764ba2;
+            color: white;
+        }
+
+
+.top-right-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.close-btn {
+    font-size: 1.3em;
+    cursor: pointer;
+    color: white;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #929dcc;
+}
+
+.menu {
+    position: relative;
+}
+
+.dots {
+    font-size: 1.5em;
+    cursor: pointer;
+    color: white;
+}
+
+.dropdown {
+    font-size: 1em;
+    display: none;
+    position: absolute;
+    top: 25px;
+    right: 0;
+    background: white;
+    color: #333;
+    list-style: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.dropdown li {
+    margin: 8px 0;
+}
+
+.dropdown li a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.dropdown li a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+
+<div class="top-right-controls">
+    <span class="close-btn" onclick="window.location.href='new.html'">✖</span>
+    <div class="menu">
+        <span class="dots">⋮</span>
+        <ul class="dropdown">
+            <li>Toll Free: 1800-11-4477</li>
+            <li>Email: ayush@healthcare.gov.in</li>
+            <li>Govt Portal: <a href="https://ayush.gov.in" target="_blank">Click Here</a></li>
+        </ul>
+    </div>
+</div>
+
+
+        <div class="header">
+            <h1>🏥 MediChat</h1>
+            <p>Your Virtual Medical Assistant</p>
+        </div>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message bot">
+                <div class="avatar">🤖</div>
+                <div class="message-content">
+                    Hello! I'm MediChat, your virtual medical assistant. How can I help you today? Please describe your symptoms or health concerns.
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        const responses = {
+            'headache': 'For headaches, try resting in a quiet, dark room. Stay hydrated and consider taking over-the-counter pain relievers. If headaches persist or worsen, please consult a doctor.',
+            'fever': 'For fever, rest and stay hydrated. You can take acetaminophen or ibuprofen to reduce fever. If fever exceeds 103°F (39.4°C) or lasts more than 3 days, seek medical attention.',
+            'cold': 'For cold symptoms, get plenty of rest, drink fluids, and use over-the-counter remedies. Symptoms typically improve within 7-10 days. See a doctor if symptoms worsen or persist.',
+            'cough': 'For a cough, stay hydrated, use honey (for ages 1+), and consider a humidifier. If cough persists for more than 3 weeks or includes blood, consult a healthcare provider.',
+            'stomach': 'For stomach issues, eat bland foods (BRAT diet: bananas, rice, applesauce, toast), stay hydrated, and avoid fatty or spicy foods. Seek help if symptoms are severe or persistent.'
+        };
+        
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            
+            setTimeout(() => {
+                const response = generateResponse(message);
+                addMessage(response, 'bot');
+            }, 500);
+        }
+        
+        function addMessage(text, sender) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = sender === 'user' ? '👤' : '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            chatContainer.appendChild(messageDiv);
+            
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function generateResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            for (let key in responses) {
+                if (lowerMessage.includes(key)) {
+                    return responses[key];
+                }
+            }
+            
+            return "Thank you for sharing. While I can provide general health information, I recommend consulting with a healthcare professional for personalized medical advice. Is there anything specific you'd like to know about?";
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        document.querySelector('.dots').addEventListener('click', () => {
+          const dropdown = document.querySelector('.dropdown');
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login To Your ABHA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#ebecf1 0%, #f7f8fb 100%); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
+        .container { background:white; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.08); max-width:980px; width:100%; padding:30px; }
+        h1 { color:#333; margin-bottom:18px; font-size:26px }
+        .tabs { display:flex; border-bottom:2px solid #e9e9ef; margin-bottom:18px; }
+        .tab { flex:1; padding:12px; text-align:center; background:none; border:none; font-size:15px; font-weight:700; color:#666; cursor:pointer; transition:all .2s; border-bottom:3px solid transparent }
+        .tab.active { color:#667eea; border-bottom:3px solid #667eea }
+        .tab:hover { background:#fafafa }
+        .tab-content { display:none; padding-top:10px }
+        .tab-content.active { display:block }
+        .form-group { margin-bottom:18px }
+        label { display:block; margin-bottom:8px; color:#333; font-weight:600; font-size:14px }
+        .required { color:#e74c3c }
+        input[type="text"], input[type="tel"] { width:100%; padding:10px 12px; border:2px solid #e6e6ef; border-radius:8px; font-size:15px }
+        input[type="text"]:focus, input[type="tel"]:focus { outline:none; border-color:#667eea }
+        .abha-input-group { display:flex; gap:8px }
+        .abha-input-group input { flex:1; text-align:center; font-size:16px; font-weight:600 }
+        .abha-input-group input:first-child { max-width:60px }
+        .captcha-container { background:#fafafa; padding:12px; border-radius:8px; border:1px solid #f0f0f3 }
+        .captcha-display { display:flex; align-items:center; gap:12px; margin-bottom:10px }
+        .captcha-text { background:white; padding:12px 18px; border-radius:6px; font-size:20px; font-weight:700; letter-spacing:6px; color:#667eea; font-family:'Courier New',monospace; border:1px solid #e6e6ef; user-select:none }
+        .captcha-icons { display:flex; gap:8px }
+        .captcha-icon { width:40px; height:40px; border:0; background:white; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.06) }
+        .captcha-icon:hover { transform:scale(1.05); background:#667eea; color:white }
+        .btn { padding:10px 18px; font-size:15px; font-weight:700; border:0; border-radius:8px; cursor:pointer; width:150px }
+        .btn-primary { background:#ff6b35; color:white }
+        .btn-primary:hover { transform:translateY(-2px) }
+        .btn-secondary { background:#667eea; color:white }
+        .clearfix::after { content:""; display:table; clear:both }
+        .otp-section { text-align:center }
+        .otp-section h2 { color:#333; margin-bottom:8px }
+        .otp-section p { color:#666; margin-bottom:14px }
+        .otp-input-group { display:flex; gap:8px; justify-content:center; margin-bottom:10px }
+        .otp-input-group input { width:46px; height:46px; text-align:center; font-size:20px; font-weight:700; border:2px solid #eee; border-radius:8px }
+        .otp-input-group input:focus { border-color:#667eea; outline:none }
+        .resend-otp { display:inline-block; margin-top:12px; color:#667eea; text-decoration:none; font-weight:700; cursor:pointer }
+        .timer { color:#999; font-size:13px; margin-top:6px }
+        .success-message, .error-message { padding:12px; border-radius:8px; margin-bottom:12px; display:none }
+        .success-message { background:#e6f4ea; color:#145a32 }
+        .error-message { background:#fdecea; color:#7b2222 }
+        .small-muted { font-size:13px; color:#666 }
+        /* responsive */
+        @media (max-width:720px){ .abha-input-group input{ font-size:14px } .captcha-text{ font-size:18px } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login To Your ABHA</h1>
+
+        <div id="successMsg" class="success-message" role="status"></div>
+        <div id="errorMsg" class="error-message" role="alert"></div>
+
+        <div class="tabs">
+            <button class="tab" id="tab0">Mobile Number</button>
+            <button class="tab" id="tab1">Aadhaar Number</button>
+            <button class="tab active" id="tab2">ABHA Number</button>
+        </div>
+
+        <div id="content0" class="tab-content">
+            <form id="formMobile">
+                <div class="form-group">
+                    <label>Enter Mobile Number <span class="required">*</span></label>
+                    <input type="tel" id="mobileInput" placeholder="Enter 10-digit mobile number" maxlength="10" required />
+                </div>
+                <div class="form-group">
+                    <label>Captcha <span class="required">*</span></label>
+                    <div class="captcha-container">
+                        <div class="captcha-display">
+                            <div class="captcha-text" id="captchaMobile"></div>
+                            <div class="captcha-icons">
+                                <button type="button" class="captcha-icon" onclick="generateCaptcha('mobile')" title="Refresh">⟳</button>
+                                <button type="button" class="captcha-icon" onclick="speakCaptcha('mobile')" title="Audio">🔊</button>
+                            </div>
+                        </div>
+                        <input type="text" id="captchaInputMobile" placeholder="Enter answer" required />
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="content1" class="tab-content">
+            <form id="formAadhaar">
+                <div class="form-group">
+                    <label>Enter Aadhaar Number <span class="required">*</span></label>
+                    <input type="text" id="aadhaarInput" placeholder="Enter 12-digit Aadhaar number" maxlength="12" required />
+                </div>
+                <div class="form-group">
+                    <label>Captcha <span class="required">*</span></label>
+                    <div class="captcha-container">
+                        <div class="captcha-display">
+                            <div class="captcha-text" id="captchaAadhaar"></div>
+                            <div class="captcha-icons">
+                                <button type="button" class="captcha-icon" onclick="generateCaptcha('aadhaar')" title="Refresh">⟳</button>
+                                <button type="button" class="captcha-icon" onclick="speakCaptcha('aadhaar')" title="Audio">🔊</button>
+                            </div>
+                        </div>
+                        <input type="text" id="captchaInputAadhaar" placeholder="Enter answer" required />
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="content2" class="tab-content active">
+            <form id="formAbha">
+                <div class="form-group">
+                    <label>Enter ABHA number <span class="required">*</span></label>
+                    <div class="abha-input-group">
+                        <input type="text" id="abhaPrefix" placeholder="00" maxlength="2" required />
+                        <input type="text" id="abhaPart1" placeholder="0000" maxlength="4" required />
+                        <input type="text" id="abhaPart2" placeholder="0000" maxlength="4" required />
+                        <input type="text" id="abhaPart3" placeholder="0000" maxlength="4" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Captcha <span class="required">*</span></label>
+                    <div class="captcha-container">
+                        <div class="captcha-display">
+                            <div class="captcha-text" id="captchaAbha"></div>
+                            <div class="captcha-icons">
+                                <button type="button" class="captcha-icon" onclick="generateCaptcha('abha')" title="Refresh">⟳</button>
+                                <button type="button" class="captcha-icon" onclick="speakCaptcha('abha')" title="Audio">🔊</button>
+                            </div>
+                        </div>
+                        <input type="text" id="captchaInputAbha" placeholder="Enter answer" required />
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+        </div>
+        <!-- OTP Section (hidden until OTP sent) -->
+        <div id="otpSection" style="display:none; margin-top:16px;">
+            <div class="otp-section">
+                <h2>Enter OTP</h2>
+                <p>We've sent a 6-digit OTP to your <span id="otpSentTo"></span></p>
+                <form id="formVerify">
+                    <div class="form-group">
+                        <div class="otp-input-group">
+                            <input type="text" maxlength="1" class="otp-digit" id="otp1" inputmode="numeric" pattern="[0-9]*" required />
+                            <input type="text" maxlength="1" class="otp-digit" id="otp2" inputmode="numeric" pattern="[0-9]*" required />
+                            <input type="text" maxlength="1" class="otp-digit" id="otp3" inputmode="numeric" pattern="[0-9]*" required />
+                            <input type="text" maxlength="1" class="otp-digit" id="otp4" inputmode="numeric" pattern="[0-9]*" required />
+                            <input type="text" maxlength="1" class="otp-digit" id="otp5" inputmode="numeric" pattern="[0-9]*" required />
+                            <input type="text" maxlength="1" class="otp-digit" id="otp6" inputmode="numeric" pattern="[0-9]*" required />
+                        </div>
+                        <div class="timer" id="timer">Time remaining: <span id="timeLeft">02:00</span></div>
+                    </div>
+                    <div class="clearfix">
+                        <button type="submit" class="btn btn-secondary">Verify OTP</button>
+                    </div>
+                </form>
+                <a href="#" class="resend-otp" id="resendLink">Resend OTP</a>
+                <div class="small-muted" style="margin-top:8px;">(Demo only — OTP is simulated in the browser. Integrate with your backend to actually send SMS.)</div>
+            </div>
+        </div>
+    </div>
+
+    <span class="close-btn" style="cursor: pointer; margin-left:15px ; color: #999; font-size: 3em;" onclick="window.location.href='abhapg.html'">></span>
+
+    <script>
+
+        
+        // State
+        let captchaAnswers = {};
+        let currentLoginMethod = '';
+        let timerInterval = null;
+        let timeRemaining = 0;
+        let currentOTP = null; // string of 6 digits
+        let maskedIdentifier = '';
+
+        // Setup on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // tabs
+            document.querySelectorAll('.tab').forEach((tab, idx) => {
+                tab.addEventListener('click', () => switchTab(idx));
+            });
+
+            // generate captchas
+            generateCaptcha('mobile');
+            generateCaptcha('aadhaar');
+            generateCaptcha('abha');
+
+            // setup inputs and forms
+            setupABHAInputs();
+            setupOTPInputs();
+
+            document.getElementById('formMobile').addEventListener('submit', (e) => sendOTP(e, 'mobile'));
+            document.getElementById('formAadhaar').addEventListener('submit', (e) => sendOTP(e, 'aadhaar'));
+            document.getElementById('formAbha').addEventListener('submit', (e) => sendOTP(e, 'abha'));
+            document.getElementById('formVerify').addEventListener('submit', verifyOTP);
+
+            document.getElementById('resendLink').addEventListener('click', resendOTP);
+        });
+
+        function switchTab(index) {
+            document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('active'));
+            document.getElementById('tab' + index).classList.add('active');
+            document.getElementById('content' + index).classList.add('active');
+            // clear messages
+            hideMessages();
+            // focus first input
+            if (index === 0) document.getElementById('mobileInput').focus();
+            if (index === 1) document.getElementById('aadhaarInput').focus();
+            if (index === 2) document.getElementById('abhaPrefix').focus();
+        }
+
+        function generateCaptcha(type) {
+            const num1 = Math.floor(Math.random() * 20) + 1;
+            const num2 = Math.floor(Math.random() * 20) + 1;
+            const operators = ['+', '-', '*'];
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            let answer;
+            switch (operator) {
+                case '+': answer = num1 + num2; break;
+                case '-': answer = num1 - num2; break;
+                case '*': answer = num1 * num2; break;
+            }
+            const captchaText = `${num1}${operator}${num2}=?`;
+            const elId = type === 'mobile' ? 'captchaMobile' : type === 'aadhaar' ? 'captchaAadhaar' : 'captchaAbha';
+            document.getElementById(elId).textContent = captchaText;
+            captchaAnswers[type] = String(answer);
+        }
+
+        function speakCaptcha(type) {
+            const elId = type === 'mobile' ? 'captchaMobile' : type === 'aadhaar' ? 'captchaAadhaar' : 'captchaAbha';
+            const text = document.getElementById(elId).textContent.replace('=?', '');
+            const spaced = text.split('').join(' ');
+            const u = new SpeechSynthesisUtterance(spaced);
+            speechSynthesis.speak(u);
+        }
+
+        function setupABHAInputs() {
+            const ids = ['abhaPrefix','abhaPart1','abhaPart2','abhaPart3'];
+            ids.forEach((id, idx) => {
+                const el = document.getElementById(id);
+                el.addEventListener('input', (e) => {
+                    el.value = el.value.replace(/\D/g, '');
+                    if (el.value.length === el.maxLength && idx < ids.length - 1) document.getElementById(ids[idx+1]).focus();
+                });
+                el.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && el.value.length === 0 && idx > 0) document.getElementById(ids[idx-1]).focus();
+                });
+            });
+        }
+
+        function setupOTPInputs() {
+            const inputs = Array.from(document.querySelectorAll('.otp-digit'));
+            inputs.forEach((input, idx) => {
+                input.addEventListener('input', (e) => {
+                    input.value = input.value.replace(/\D/g, '');
+                    if (input.value && idx < inputs.length - 1) inputs[idx+1].focus();
+                });
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value === '' && idx > 0) inputs[idx-1].focus();
+                    if (e.key === 'ArrowLeft' && idx > 0) inputs[idx-1].focus();
+                    if (e.key === 'ArrowRight' && idx < inputs.length - 1) inputs[idx+1].focus();
+                });
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0,6).split('');
+                    pasted.forEach((ch, i) => { if (inputs[i]) inputs[i].value = ch; });
+                });
+            });
+        }
+
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.textContent = msg; el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg; el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 6000);
+        }
+        function hideMessages() { document.getElementById('successMsg').style.display = 'none'; document.getElementById('errorMsg').style.display = 'none'; }
+
+        function sendOTP(e, method) {
+            e.preventDefault(); hideMessages();
+            // collect inputs & validate
+            let captchaInput, identifierRaw;
+            if (method === 'mobile') {
+                captchaInput = document.getElementById('captchaInputMobile').value.trim();
+                identifierRaw = document.getElementById('mobileInput').value.trim();
+                if (!/^\d{10}$/.test(identifierRaw)) { showError('Please enter a valid 10-digit mobile number.'); return; }
+            } else if (method === 'aadhaar') {
+                captchaInput = document.getElementById('captchaInputAadhaar').value.trim();
+                identifierRaw = document.getElementById('aadhaarInput').value.trim();
+                if (!/^\d{12}$/.test(identifierRaw)) { showError('Please enter a valid 12-digit Aadhaar number.'); return; }
+            } else {
+                captchaInput = document.getElementById('captchaInputAbha').value.trim();
+                const p = document.getElementById('abhaPrefix').value.trim();
+                const a1 = document.getElementById('abhaPart1').value.trim();
+                const a2 = document.getElementById('abhaPart2').value.trim();
+                const a3 = document.getElementById('abhaPart3').value.trim();
+                if (!(p.length===2 && a1.length===4 && a2.length===4 && a3.length===4)) { showError('Please enter a valid ABHA number in all parts.'); return; }
+                identifierRaw = `${p}-${a1}-${a2}-${a3}`;
+            }
+
+            if (captchaInput === '' || captchaAnswers[method] === undefined) { showError('Captcha missing. Please try again.'); return; }
+            if (String(captchaInput) !== String(captchaAnswers[method])) {
+                showError('Incorrect captcha. Please try again.');
+                generateCaptcha(method);
+                return;
+            }
+
+            // simulate sending OTP
+            currentLoginMethod = method;
+            currentOTP = String(Math.floor(100000 + Math.random() * 900000)); // 6-digit
+            maskedIdentifier = maskIdentifier(method, identifierRaw);
+
+            // show OTP UI
+            document.getElementById('loginSection')?.remove?.(); // (if present) not used here, just keep page clean
+            document.getElementById('otpSentTo').textContent = `${method === 'mobile' ? 'mobile number' : method === 'aadhaar' ? 'Aadhaar-linked mobile' : 'ABHA-linked mobile'} (${maskedIdentifier})`;
+            document.getElementById('otpSection').style.display = 'block';
+
+            // clear OTP inputs
+            document.querySelectorAll('.otp-digit').forEach(i => i.value = '');
+            document.getElementById('otp1').focus();
+
+            startTimer(120);
+            showSuccess(`OTP sent successfully to ${maskedIdentifier} (demo). OTP: ${currentOTP}`);
+            // NOTE: For real use, DO NOT display OTP in UI. It is shown here for demo/testing only.
+        }
+
+        function maskIdentifier(method, id) {
+            if (method === 'mobile') {
+                // show last 2 digits
+                return id.replace(/./g, '*').slice(0, -2) + id.slice(-2);
+            } else if (method === 'aadhaar') {
+                // mask all but last 4
+                const digits = id.replace(/-/g, '');
+                return '****-****-' + digits.slice(-4);
+            } else {
+                // ABHA - show last 4
+                return '****-****-****-' + id.slice(-4);
+            }
+        }
+
+        function startTimer(seconds) {
+            // stop existing
+            if (timerInterval) clearInterval(timerInterval);
+            timeRemaining = seconds;
+            updateTimerUI();
+            document.getElementById('resendLink').style.pointerEvents = 'none';
+            document.getElementById('resendLink').style.opacity = '0.5';
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerUI();
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('resendLink').style.pointerEvents = 'auto';
+                    document.getElementById('resendLink').style.opacity = '1';
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const mm = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            const ss = (timeRemaining % 60).toString().padStart(2, '0');
+            document.getElementById('timeLeft').textContent = `${mm}:${ss}`;
+        }
+
+        function resendOTP(e) {
+            e.preventDefault(); hideMessages();
+            if (timeRemaining > 0) {
+                showError('You can resend OTP only after the timer expires.');
+                return;
+            }
+            if (!currentLoginMethod) { showError('No login session found. Please start again.'); return; }
+
+            currentOTP = String(Math.floor(100000 + Math.random() * 900000));
+            startTimer(120);
+            showSuccess('A new OTP was generated and (simulated) sent. OTP: ' + currentOTP);
+            // In production: call your backend API to send the OTP SMS
+        }
+
+        function verifyOTP(e) {
+            e.preventDefault(); hideMessages();
+            const digits = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value).join('');
+            if (digits.length !== 6) { showError('Please enter the 6-digit OTP.'); return; }
+            if (String(digits) === String(currentOTP)) {
+                clearInterval(timerInterval);
+                showSuccess('OTP verified successfully. You are logged in (demo).');
+                // show success UI or redirect
+                document.getElementById('otpSection').style.display = 'none';
+                // optionally show logged-in details
+                const container = document.querySelector('.container');
+                const div = document.createElement('div');
+                div.innerHTML = `<div style=\"margin-top:16px;padding:12px;border-radius:8px;background:#eef6ff;color:#0b2b66\">Logged in via <strong>${currentLoginMethod}</strong> — ${maskedIdentifier}</div>`;
+                container.appendChild(div);
+            } else {
+                showError('Incorrect OTP. Please try again.');
+            }
+        }
+
+        // small helper: if original markup included loginSection id, keep behaviour
+        (function ensureLoginSectionAvailability(){
+            if (!document.getElementById('loginSection')) {
+                // create a marker for backward compatibility for earlier scripts
+                const marker = document.createElement('div');
+                marker.id = 'loginSection';
+                // don't display
+                marker.style.display = 'none';
+                document.body.appendChild(marker);
+            }
+        })();
+
+    </script>
+</body>
+</html>
